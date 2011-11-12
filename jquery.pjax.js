@@ -134,13 +134,9 @@ var pjax = $.pjax = function( options ) {
       pjax: options.container,
       fragment: options.fragment,
       timeout: options.timeout,
+      data: options.data,
 	  ajaxurl: options.ajaxurl
     }
-
-    // If there are extra params, save the complete URL in the state object
-    var query = $.param(options.data)
-    if ( query != "_pjax=true" )
-      state.ajaxurl = options.ajaxurl + (/\?/.test(options.ajaxurl) ? "&" : "?") + query
 
     if ( options.replace ) {
       window.history.replaceState(state, document.title, options.url)
@@ -243,6 +239,7 @@ $(window).bind('popstate', function(event){
         url: location.href,
         ajaxurl: state.ajaxurl,
         fragment: state.fragment,
+        data: state.data,
         container: container,
         push: false,
         timeout: state.timeout
