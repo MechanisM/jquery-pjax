@@ -48,6 +48,7 @@ $.fn.pjax = function( container, options ) {
       url: this.href,
       container: $(this).attr('data-pjax'),
       clickedElement: $(this),
+	  cache: false,
       fragment: null
     }
 
@@ -104,6 +105,11 @@ var pjax = $.pjax = function( options ) {
   options.context = $container
 
   options.success = function(data){
+
+	// cache the raw data before we do anything to it
+	if ( options.cache )
+		$.pjax_cache( options.url, data );
+
     if ( options.fragment ) {
       // If they specified a fragment, look for it in the response
       // and pull it out.
@@ -180,12 +186,25 @@ var pjax = $.pjax = function( options ) {
   }
 
   pjax.options = options
-  pjax.xhr = $.ajax(options.ajaxurl,options)
-  $(document).trigger('pjax', [pjax.xhr, options])
+
+  if ( options.cache && ( cache_data = $.pjax_cache( options.url ) ) ) {
+	  $.proxy( options.success, options.context )( cache_data );
+	  $(document).trigger('pjax_cache', [cache_data, options])
+  } else {
+	  pjax.xhr = $.ajax(options.ajaxurl,options)
+	  $(document).trigger('pjax', [pjax.xhr, options])
+  }
 
   return pjax.xhr
 }
 
+var pjax_cache = {};
+
+$.pjax_cache = function( url, val ) {
+	if ( val )
+		pjax_cache[url] = val;
+	return pjax_cache[url];
+}
 
 pjax.defaults = {
   timeout: 650,
