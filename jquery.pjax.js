@@ -49,6 +49,8 @@ $.fn.pjax = function( container, options ) {
       fragment: null
     }
 
+	defaults.ajaxurl = $(this).attr('data-ajaxurl') || defaults.url;
+
     $.pjax($.extend({}, defaults, options))
 
     event.preventDefault()
@@ -93,6 +95,10 @@ var pjax = $.pjax = function( options ) {
     options.url = options.url()
   }
 
+  if ( $.isFunction(options.ajaxurl) ) {
+    options.ajaxurl = options.ajaxurl()
+  }
+
   options.context = $container
 
   options.success = function(data){
@@ -128,13 +134,14 @@ var pjax = $.pjax = function( options ) {
     var state = {
       pjax: options.container,
       fragment: options.fragment,
-      timeout: options.timeout
+      timeout: options.timeout,
+	  ajaxurl: options.ajaxurl
     }
 
     // If there are extra params, save the complete URL in the state object
     var query = $.param(options.data)
     if ( query != "_pjax=true" )
-      state.url = options.url + (/\?/.test(options.url) ? "&" : "?") + query
+      state.ajaxurl = options.ajaxurl + (/\?/.test(options.ajaxurl) ? "&" : "?") + query
 
     if ( options.replace ) {
       window.history.replaceState(state, document.title, options.url)
@@ -172,7 +179,7 @@ var pjax = $.pjax = function( options ) {
   }
 
   pjax.options = options
-  pjax.xhr = $.ajax(options)
+  pjax.xhr = $.ajax(options.ajaxurl,options)
   $(document).trigger('pjax', [pjax.xhr, options])
 
   return pjax.xhr
@@ -228,7 +235,8 @@ $(window).bind('popstate', function(event){
     var container = state.pjax
     if ( $(container+'').length )
       $.pjax({
-        url: state.url || location.href,
+        url: location.href,
+        ajaxurl: state.ajaxurl,
         fragment: state.fragment,
         container: container,
         push: false,
