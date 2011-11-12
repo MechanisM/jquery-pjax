@@ -117,9 +117,6 @@ var pjax = $.pjax = function( options ) {
           return window.location = options.url
     }
 
-    // Make it happen.
-    this.html(data)
-
     // If there's a <title> tag in the response, use it as
     // the page's title.
     var oldTitle = document.title,
@@ -155,6 +152,9 @@ var pjax = $.pjax = function( options ) {
 
       window.history.pushState(state, document.title, options.url)
     }
+
+    // Make it happen.
+    this.html(data)
 
     // Google Analytics support
     if ( (options.replace || options.push) && window._gaq )
