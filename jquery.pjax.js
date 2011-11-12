@@ -1,6 +1,8 @@
 // jquery.pjax.js
 // copyright chris wanstrath
 // https://github.com/defunkt/jquery-pjax
+// this fork by johnbillion
+// https://github.com/johnbillion/jquery-pjax
 
 (function($){
 
