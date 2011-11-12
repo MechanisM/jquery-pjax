@@ -123,13 +123,13 @@ var pjax = $.pjax = function( options ) {
     // If there's a <title> tag in the response, use it as
     // the page's title.
     var oldTitle = document.title,
-        title = $.trim( this.find('title').remove().text() )
-    if ( title ) document.title = title
+	title = $.trim( this.find('title').remove().text() )
 
     // No <title>? Fragment? Look for data-title and title attributes.
-    if ( !title && options.fragment ) {
-      title = $fragment.attr('title') || $fragment.data('title')
-    }
+    if ( !title && options.fragment )
+      title = $fragment.attr('data-title') || $fragment.attr('title') || $fragment.data('title')
+
+    if ( title ) document.title = title
 
     var state = {
       pjax: options.container,
