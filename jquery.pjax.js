@@ -141,7 +141,8 @@ var pjax = $.pjax = function( options ) {
       fragment: options.fragment,
       timeout: options.timeout,
       data: options.data,
-	  ajaxurl: options.ajaxurl
+	  ajaxurl: options.ajaxurl,
+	  cache: options.cache
     }
 
     if ( options.replace ) {
@@ -257,6 +258,7 @@ $(window).bind('popstate', function(event){
       $.pjax({
         url: location.href,
         ajaxurl: state.ajaxurl,
+        cache: state.cache,
         fragment: state.fragment,
         data: state.data,
         container: container,
