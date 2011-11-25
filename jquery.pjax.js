@@ -54,7 +54,15 @@ $.fn.pjax = function( container, options ) {
 
 	defaults.ajaxurl = $(this).attr('data-ajaxurl') || defaults.url
 
-    $.pjax($.extend({}, defaults, options))
+	args = $.extend({}, defaults, options)
+
+	// Skip PJAX if the link scheme doesn't match the document scheme
+	if ( args.url.indexOf( '://' ) ) {
+		if ( document.location.protocol != args.url.match( /^[a-z]+:/i ) )
+			return true
+	}
+
+    $.pjax(args)
 
     event.preventDefault()
   })
