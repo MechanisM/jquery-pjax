@@ -52,7 +52,7 @@ $.fn.pjax = function( container, options ) {
       fragment: null
     }
 
-	defaults.ajaxurl = $(this).attr('data-ajaxurl') || defaults.url;
+	defaults.ajaxurl = $(this).attr('data-ajaxurl') || defaults.url
 
     $.pjax($.extend({}, defaults, options))
 
@@ -108,7 +108,7 @@ var pjax = $.pjax = function( options ) {
 
 	// cache the raw data before we do anything to it
 	if ( options.cache )
-		$.pjax_cache( options.url, data );
+		$.pjax_cache( options.url, data )
 
     if ( options.fragment ) {
       // If they specified a fragment, look for it in the response
@@ -173,10 +173,13 @@ var pjax = $.pjax = function( options ) {
     }
 
     // If the clicked element is still present, un-focus it
-    options.clickedElement.blur();
+    options.clickedElement.blur()
 
     // Invoke their success handler if they gave us one.
     success.apply(this, arguments)
+
+	$(document).trigger('pjax_complete', [data, options, $fragment])
+
   }
 
   // Cancel the current request if we're already pjaxing
@@ -189,7 +192,7 @@ var pjax = $.pjax = function( options ) {
   pjax.options = options
 
   if ( options.cache && ( cache_data = $.pjax_cache( options.url ) ) ) {
-	  $.proxy( options.success, options.context )( cache_data );
+	  $.proxy( options.success, options.context )( cache_data )
 	  $(document).trigger('pjax_cache', [cache_data, options])
   } else {
 	  pjax.xhr = $.ajax(options.ajaxurl,options)
@@ -199,12 +202,12 @@ var pjax = $.pjax = function( options ) {
   return pjax.xhr
 }
 
-var pjax_cache = {};
+var pjax_cache = {}
 
 $.pjax_cache = function( url, val ) {
 	if ( val )
-		pjax_cache[url] = val;
-	return pjax_cache[url];
+		pjax_cache[url] = val
+	return pjax_cache[url]
 }
 
 pjax.defaults = {
